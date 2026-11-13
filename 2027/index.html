@@ -71,9 +71,10 @@ nav.links a:hover{color:var(--paper)}
 @keyframes drip{to{stroke-dashoffset:-12}}
 .lockup{--lw:clamp(190px,30vw,340px);--lh:calc(var(--lw) * 180 / 424);display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.6vw,18px);min-width:0;padding-block:8px 12px}
 .logo{width:calc(var(--lh) * 476 / 180);height:var(--lh);flex:none;display:block;overflow:visible}
-.eyebrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;color:var(--mute)}
-.eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}color:var(--ink);background:var(--paper);padding:3px 8px;border-radius:2px;font-weight:600}
-h1{font-family:var(--f-dots);font-weight:900;font-size:clamp(1.9rem,5vw,4.2rem);overflow-wrap:break-word;line-height:1;letter-spacing:0;margin:0;text-wrap:balance}
+.eyebrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:flex-end;text-align:right;color:var(--mute);margin-top:-10px}
+.eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}
+.eyebrow .pill{color:var(--ink);background:var(--paper);padding:3px 8px;border-radius:2px;font-weight:600}
+h1{text-align:center;font-family:var(--f-dots);font-weight:900;font-size:clamp(1.9rem,5vw,4.2rem);overflow-wrap:break-word;line-height:1;letter-spacing:0;margin:0;text-wrap:balance}
 h1 .and{display:block;font-family:var(--f-mono);font-weight:400;font-size:.26em;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin:.55em 0 .5em}
 .lede{max-width:none;color:var(--soft2);font-size:var(--s1);line-height:1.5;margin:0}
 .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -273,7 +274,7 @@ footer .brand{font-size:1.4rem}
 :root[data-theme="light"] h1 .dr,:root[data-theme="light"] .big strong{background:linear-gradient(transparent 58%,var(--dr) 58%,var(--dr) 92%,transparent 92%)}
 :root[data-theme="light"] .brand b{color:var(--paper);background:var(--gd);padding:0 3px;border:1.5px solid var(--paper)}
 :root[data-theme="light"] .brand b.dr{background:var(--dr)}
-:root[data-theme="light"] .eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}color:var(--ink)}
+:root[data-theme="light"] .eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}
 :root[data-theme="light"] .format{border-color:var(--paper)}
 :root[data-theme="light"] .ghost{border-color:var(--paper)}
 :root[data-theme="light"] .ghost:hover{background:var(--gd);color:#000}
@@ -348,8 +349,8 @@ footer .brand{font-size:1.4rem}
             </g>
           </svg>
         </div>
-        <div class="eyebrow mono"><span class="pill">2nd edition</span><span>Half-day workshop at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a></span></div>
         <h1>Bridging <span class="gd">Graph Drawing</span> and <span class="dr">Dimension&shy;ality Reduction</span></h1>
+        <div class="eyebrow mono"><span class="pill">2nd edition</span><span>Half-day workshop at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a></span></div>
         <p class="lede">Both fields project complex, high-dimensional structure into readable low-dimensional pictures. GDxDR brings the two communities into one room to compare methods, question evaluation practice, and plan work together.</p>
         <dl class="facts">
           <div><dt>Submit by</dt><dd>15 Feb 2027</dd></div>

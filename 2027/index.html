@@ -50,6 +50,8 @@ header.top .wrap{display:flex;align-items:center;gap:24px;height:60px}
 .brand b{font-weight:900}
 .brand .x{color:var(--paper);font-size:.8em;margin-inline:1px}
 .brand .yr{font-family:var(--f-mono);font-weight:600;font-size:.72rem;color:var(--mute);border:1px solid var(--line);padding:2px 6px;border-radius:3px;letter-spacing:.06em}
+.wm-mini{display:block;flex:none;overflow:visible;height:26px;width:calc(26px * 469 / 108)}
+.wm-mini.md{height:38px;width:calc(38px * 469 / 108)}
 nav.links{display:flex;gap:22px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
 nav.links::-webkit-scrollbar{display:none}
 nav.links a{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);text-decoration:none;white-space:nowrap;padding-block:6px}
@@ -347,7 +349,7 @@ footer .brand{font-size:1.4rem}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="GDxDR 2027 home"><svg class="mark sm" aria-hidden="true"><use href="#mark-sm"/></svg><b class="gd">GD</b><span class="x">×</span><b class="dr">DR</b><span class="yr">'27</span></a>
+    <a class="brand" href="#top" aria-label="GDxDR 2027 home"><svg class="mark sm" aria-hidden="true"><use href="#mark-sm"/></svg><svg class="wm-mini sm" viewBox="125 38 469 108" aria-hidden="true"><defs><linearGradient id="yrHead" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffff00"/><stop offset="1" stop-color="#22ff22"/></linearGradient></defs><g font-family="Arial, 'Helvetica Neue', Helvetica, 'Liberation Sans', sans-serif" font-weight="700"><text x="292" y="140" text-anchor="end" font-size="118" fill="#ffff00" letter-spacing="-2" class="wm-c">GD</text><text x="333" y="128" text-anchor="middle" font-size="64" fill="#555" class="wm-s">×</text><text x="330" y="125" text-anchor="middle" font-size="64" fill="#fff" class="wm-w">×</text><text x="368" y="140" text-anchor="start" font-size="118" fill="#22ff22" letter-spacing="-2" class="wm-c">DR</text><text x="534" y="76" text-anchor="start" font-size="44" fill="url(#yrHead)" letter-spacing="-1" class="wm-y">'27</text></g></svg></a>
     <nav class="links" aria-label="Sections">
       <a href="#about">About</a>
       <a href="#topics">Topics</a>
@@ -532,7 +534,7 @@ footer .brand{font-size:1.4rem}
 
 <footer>
   <div class="wrap">
-    <span class="brand"><svg class="mark md" aria-hidden="true"><use href="#mark-sm"/></svg><b class="gd">GD</b><span class="x">×</span><b class="dr">DR</b></span>
+    <span class="brand"><svg class="mark md" aria-hidden="true"><use href="#mark-sm"/></svg><svg class="wm-mini md" viewBox="125 38 469 108" aria-hidden="true"><defs><linearGradient id="yrFoot" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffff00"/><stop offset="1" stop-color="#22ff22"/></linearGradient></defs><g font-family="Arial, 'Helvetica Neue', Helvetica, 'Liberation Sans', sans-serif" font-weight="700"><text x="292" y="140" text-anchor="end" font-size="118" fill="#ffff00" letter-spacing="-2" class="wm-c">GD</text><text x="333" y="128" text-anchor="middle" font-size="64" fill="#555" class="wm-s">×</text><text x="330" y="125" text-anchor="middle" font-size="64" fill="#fff" class="wm-w">×</text><text x="368" y="140" text-anchor="start" font-size="118" fill="#22ff22" letter-spacing="-2" class="wm-c">DR</text><text x="534" y="76" text-anchor="start" font-size="44" fill="url(#yrFoot)" letter-spacing="-1" class="wm-y">'27</text></g></svg></span>
     <span class="mono">GDxDR: Bridging <span class="gd">Graph Drawing</span> and <span class="dr">Dimensionality Reduction</span> · co-located with EuroVis 2027, Stuttgart</span>
     <span class="mono copy">© 2026–2027 Claudio D. G. Linhares</span>
   </div>

@@ -57,6 +57,8 @@ nav.links a:hover{color:var(--paper)}
 @media (max-width:860px){nav.links{display:none}.brand{margin-right:auto}}
 .cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:#000;background:var(--gd);border:1.5px solid var(--btn-line);padding:8px 14px;border-radius:2px;white-space:nowrap;transition:background .2s}
 .cta:hover{background:var(--dr)}
+.cta-short{display:none;text-transform:none;letter-spacing:.04em}
+@media (max-width:600px){.cta-full{display:none}.cta-short{display:inline}.cta{padding:8px 11px}header.top .wrap{gap:12px}}
 
 /* hero */
 .hero{border-bottom:1px solid var(--line)}
@@ -352,11 +354,11 @@ footer .brand{font-size:1.4rem}
       <a href="#call">Call</a>
       <a href="#dates">Dates</a>
       <a href="#program">Program</a>
-      <a href="#people">Organizers</a>
+      <a href="#people">Program chairs</a>
       <a href="#photos">GDxDR '26</a>
     </nav>
     <button class="theme" id="theme" type="button" aria-label="Switch to light mode" aria-pressed="false"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg><span id="themeLabel">Light</span></button>
-    <a class="cta" href="#call">Call for papers</a>
+    <a class="cta" href="#call" aria-label="Call for papers"><span class="cta-full">Call for papers</span><span class="cta-short">CfP</span></a>
   </div>
 </header>
 
@@ -480,7 +482,7 @@ footer .brand{font-size:1.4rem}
 
   <section class="band" id="people">
     <div class="wrap">
-      <div class="rail"><h2>Organizers</h2></div>
+      <div class="rail"><h2>Program chairs</h2></div>
       <div class="body">
         <div class="people">
           <figure class="person g"><img src="img/linhares.jpg" alt="Claudio D. G. Linhares" width="480" height="602" loading="lazy"><figcaption><span class="nm">Claudio D. G. Linhares</span><span class="af"><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i>Linnaeus University, SE</span></span></figcaption></figure>

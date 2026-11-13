@@ -240,7 +240,12 @@ section.band.active h2{color:var(--gd-t)}
 .pf{position:relative;perspective:1400px;transform:rotate(var(--r,0deg));transition:transform .45s ease}
 .pf:nth-child(3n+1){--r:-2.2deg}.pf:nth-child(3n+2){--r:1.6deg;margin-top:14px}.pf:nth-child(3n){--r:-.9deg;margin-top:4px}
 .pf:hover{transform:rotate(0deg) translateY(-6px)}
-.pf .flip{display:grid;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.55,.05,.25,1)}
+.pf .flip{display:grid;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.55,.05,.25,1);animation:sway 6s ease-in-out infinite;animation-delay:var(--d,0s)}
+.pf.lift{animation:lift .75s cubic-bezier(.3,.1,.3,1)}
+/* idle drift: each print swings gently on its pin, out of step with its neighbours */
+@keyframes sway{0%,100%{translate:0 0;rotate:0deg}25%{translate:0 -5px;rotate:.8deg}50%{translate:0 2px;rotate:-.6deg}75%{translate:0 -3px;rotate:.4deg}}
+/* during a flip the print comes off the wall and settles back */
+@keyframes lift{0%{translate:0 0;scale:1}45%{translate:0 -14px;scale:1.06}100%{translate:0 0;scale:1}}
 .pf .flip.turned{transform:rotateY(180deg)}
 .pf .face{grid-area:1/1;margin:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--frame);padding:10px 10px 0;box-shadow:0 1px 1px rgba(0,0,0,.35),0 18px 34px -14px rgba(0,0,0,.7)}
 .pf .face.back{transform:rotateY(180deg)}
@@ -251,11 +256,12 @@ section.band.active h2{color:var(--gd-t)}
 .pf .face.alt figcaption span::before{background:var(--dr)}
 :root[data-theme="light"] .deck{--frame:#ffffff}
 :root[data-theme="light"] .pf .face{outline:1.5px solid var(--paper);box-shadow:0 14px 26px -16px rgba(0,0,0,.45)}
-@media (prefers-reduced-motion:reduce){.pf .flip{transition:none}}
+@media (prefers-reduced-motion:reduce){.pf .flip{transition:none;animation:none}.pf.lift{animation:none}}
 :root[data-theme="light"] .strip{scrollbar-color:var(--paper) transparent}
 :root[data-theme="light"] .strip::-webkit-scrollbar-thumb{background:var(--paper)}
 
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;padding-block:36px;color:var(--mute)}
+footer .copy{flex-basis:100%;text-align:center;border-top:1px solid var(--line);padding-top:18px;margin-top:6px}
 footer .brand{font-size:1.4rem}
 
 /* theme switch */
@@ -480,7 +486,6 @@ footer .brand{font-size:1.4rem}
       <div class="body">
         <div class="gal-bar">
           <p>Scenes from the first edition at EuroVis 2026 in Nottingham.</p>
-          <div class="gal-nav" id="galNav" hidden><button type="button" id="galPlay" aria-label="Pause slideshow" aria-pressed="false">❚❚</button><button type="button" id="galNext" aria-label="Next photo">→</button></div>
         </div>
         <div class="deck" id="deck" aria-live="off"></div>
         <div class="strip" id="strip" tabindex="0" role="region" aria-label="Photos from GDxDR 2026">
@@ -554,26 +559,23 @@ footer .brand{font-size:1.4rem}
         var fl=document.createElement("div");fl.className="flip";var a=face("front"),b=face("back");
         fl.appendChild(a);fl.appendChild(b);pf.appendChild(fl);deck.appendChild(pf);
         var idx=(ptr+k)%N;fill(a,idx);fill(b,idx);b.setAttribute("aria-hidden","true");
-        slots.push({fl:fl,faces:[a,b],up:0})}
+        pf.style.setProperty("--d",(-k*1.7)+"s");
+        slots.push({pf:pf,fl:fl,faces:[a,b],up:0})}
       ptr=(ptr+n)%N;turn=0}
     function flip(){
       var s=slots[turn%S];turn++;
       var hiddenFace=s.faces[1-s.up];fill(hiddenFace,ptr);ptr=(ptr+1)%N;
       s.faces[s.up].setAttribute("aria-hidden","true");hiddenFace.removeAttribute("aria-hidden");
-      s.up=1-s.up;s.fl.classList.toggle("turned",s.up===1)}
+      s.up=1-s.up;s.fl.classList.toggle("turned",s.up===1);
+      /* lift the print off the wall while it turns */
+      s.pf.classList.remove("lift");void s.pf.offsetWidth;s.pf.classList.add("lift")}
     function run(){clearInterval(timer);timer=null;
-      if(!userPaused&&!hover&&visible&&!document.hidden)timer=setInterval(flip,2600)}
-    var play=document.getElementById("galPlay"),next=document.getElementById("galNext");
-    function syncBtn(){play.textContent=userPaused?"▶":"❚❚";play.setAttribute("aria-label",userPaused?"Play slideshow":"Pause slideshow");play.setAttribute("aria-pressed",String(userPaused))}
-    play.addEventListener("click",function(){userPaused=!userPaused;syncBtn();run()});
-    next.addEventListener("click",function(){flip();run()});
-    deck.addEventListener("mouseenter",function(){hover=true;run()});
-    deck.addEventListener("mouseleave",function(){hover=false;run()});
+      if(visible&&!document.hidden)timer=setInterval(flip,1500)}
     document.addEventListener("visibilitychange",run);
     if("IntersectionObserver" in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;run()},{threshold:.15}).observe(deck)}
     var rz;window.addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){build();run()},150)});
-    st.hidden=true;document.getElementById("galNav").hidden=false;
-    build();syncBtn();run();
+    st.hidden=true;
+    build();run();
   })();
 
   /* ---------- the GDxDR mark, alive: same nodes and edges as the logo, turned in 3D ---------- */

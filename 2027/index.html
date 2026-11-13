@@ -56,6 +56,8 @@ nav.links{display:flex;gap:22px;margin-left:auto;overflow-x:auto;scrollbar-width
 nav.links::-webkit-scrollbar{display:none}
 nav.links a{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);text-decoration:none;white-space:nowrap;padding-block:6px}
 nav.links a:hover{color:var(--paper)}
+/* medium widths: keep every menu item visible by tightening the header */
+@media (min-width:861px) and (max-width:1240px){header.top .wrap{gap:16px}nav.links{gap:14px}nav.links a{letter-spacing:.03em;font-size:.74rem}.cta-full{display:none}.cta-short{display:inline}.cta{padding:8px 11px}.theme span{display:none}}
 @media (max-width:860px){nav.links{display:none}.brand{margin-right:auto}}
 .cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:#000;background:var(--gd);border:1.5px solid var(--btn-line);padding:8px 14px;border-radius:2px;white-space:nowrap;transition:background .2s}
 .cta:hover{background:var(--dr)}

@@ -204,6 +204,28 @@ section.band.active h2{color:var(--gd-t)}
 .ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--paper);border:1px solid var(--line);padding:9px 12px;border-radius:2px;transition:border-color .2s,color .2s}
 .ghost:hover{border-color:var(--gd);color:var(--gd-t)}
 
+/* 2026 photo strip */
+.gal-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.gal-bar p{margin:0;color:var(--soft);flex:1 1 280px;min-width:0}
+.gal-nav{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;color:var(--mute);font-variant-numeric:tabular-nums}
+.gal-nav button{width:38px;height:38px;display:inline-grid;place-items:center;border:1px solid var(--line);border-radius:2px;background:transparent;color:var(--paper);cursor:pointer;font-size:1.05rem;line-height:1}
+.gal-nav button:hover:not(:disabled){border-color:var(--gd);color:var(--gd-t)}
+.gal-nav button:disabled{opacity:.35;cursor:default}
+.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--gd) transparent;cursor:grab;-webkit-overflow-scrolling:touch}
+.strip.drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.strip:focus-visible{outline:2px solid var(--gd);outline-offset:4px}
+.strip::-webkit-scrollbar{height:6px}
+.strip::-webkit-scrollbar-thumb{background:var(--gd);border-radius:3px}
+.strip figure{margin:0;flex:0 0 auto;width:clamp(230px,30vw,340px);scroll-snap-align:start;position:relative}
+.strip img{width:100%;max-width:100%;height:auto;aspect-ratio:1;object-fit:cover;display:block;border-bottom:3px solid var(--gd);pointer-events:none;-webkit-user-drag:none}
+.strip figure:nth-child(even) img{border-bottom-color:var(--dr)}
+.strip figcaption{position:absolute;left:10px;top:10px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:2px}
+:root[data-theme="light"] .strip img{border:1.5px solid var(--paper);border-bottom:4px solid var(--gd)}
+:root[data-theme="light"] .strip figure:nth-child(even) img{border-bottom-color:var(--dr)}
+:root[data-theme="light"] .gal-nav button{border-color:var(--paper)}
+:root[data-theme="light"] .strip{scrollbar-color:var(--paper) transparent}
+:root[data-theme="light"] .strip::-webkit-scrollbar-thumb{background:var(--paper)}
+
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;padding-block:36px;color:var(--mute)}
 footer .brand{font-size:1.4rem}
 
@@ -281,6 +303,7 @@ footer .brand{font-size:1.4rem}
       <a href="#dates">Dates</a>
       <a href="#program">Program</a>
       <a href="#people">Organizers</a>
+      <a href="#photos">Photos</a>
       <a href="https://sites.google.com/view/gdxdr26/home" target="_blank" rel="noopener">GDxDR '26 ↗</a>
     </nav>
     <button class="theme" id="theme" type="button" aria-label="Switch to light mode" aria-pressed="false"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg><span id="themeLabel">Light</span></button>
@@ -424,6 +447,37 @@ footer .brand{font-size:1.4rem}
     </div>
   </section>
 
+  <section class="band" id="photos">
+    <div class="wrap">
+      <div class="rail"><h2>GDxDR '26</h2><span class="mono" style="color:var(--mute)">EuroVis 2026 · Nottingham</span></div>
+      <div class="body">
+        <div class="gal-bar">
+          <p>Scenes from the first edition. Scroll, swipe or drag sideways.</p>
+          <div class="gal-nav"><button type="button" id="galPrev" aria-label="Previous photos">←</button><span id="galCount" aria-live="polite">01 / 16</span><button type="button" id="galNext" aria-label="Next photos">→</button></div>
+        </div>
+        <div class="strip" id="strip" tabindex="0" role="region" aria-label="Photos from GDxDR 2026">
+<figure><img src="img/gdxdr26/p01.jpg" alt="Opening of GDxDR '26 at EuroVis 2026" width="900" height="900" loading="eager" decoding="async"><figcaption>01</figcaption></figure>
+          <figure><img src="img/gdxdr26/p02.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="eager" decoding="async"><figcaption>02</figcaption></figure>
+          <figure><img src="img/gdxdr26/p03.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="eager" decoding="async"><figcaption>03</figcaption></figure>
+          <figure><img src="img/gdxdr26/p04.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>04</figcaption></figure>
+          <figure><img src="img/gdxdr26/p05.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>05</figcaption></figure>
+          <figure><img src="img/gdxdr26/p06.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>06</figcaption></figure>
+          <figure><img src="img/gdxdr26/p07.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>07</figcaption></figure>
+          <figure><img src="img/gdxdr26/p08.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>08</figcaption></figure>
+          <figure><img src="img/gdxdr26/p09.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>09</figcaption></figure>
+          <figure><img src="img/gdxdr26/p10.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>10</figcaption></figure>
+          <figure><img src="img/gdxdr26/p11.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>11</figcaption></figure>
+          <figure><img src="img/gdxdr26/p12.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>12</figcaption></figure>
+          <figure><img src="img/gdxdr26/p13.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>13</figcaption></figure>
+          <figure><img src="img/gdxdr26/p14.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>14</figcaption></figure>
+          <figure><img src="img/gdxdr26/p15.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>15</figcaption></figure>
+          <figure><img src="img/gdxdr26/p16.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>16</figcaption></figure>
+        </div>
+        <div class="linkrow"><a class="ghost" href="https://sites.google.com/view/gdxdr26/photos" target="_blank" rel="noopener">All photos on the GDxDR '26 site ↗</a></div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -453,6 +507,29 @@ footer .brand{font-size:1.4rem}
     bands.forEach(function(s){io.observe(s)});
     window.addEventListener("scroll",function(){if(window.scrollY<200)setActive(null)},{passive:true});
   }
+
+  /* ---------- 2026 photo strip: arrows, counter, drag-to-scroll ---------- */
+  (function(){
+    var st=document.getElementById("strip");if(!st)return;
+    var figs=st.querySelectorAll("figure"),prev=document.getElementById("galPrev"),next=document.getElementById("galNext"),cnt=document.getElementById("galCount");
+    var N=figs.length,pad=function(n){return (n<10?"0":"")+n};
+    function step(){return figs.length>1?figs[1].offsetLeft-figs[0].offsetLeft:st.clientWidth}
+    function update(){var s=step(),i=Math.round(st.scrollLeft/s),max=st.scrollWidth-st.clientWidth-2;
+      var shown=Math.max(1,Math.floor((st.clientWidth+14)/s));
+      cnt.textContent=pad(Math.min(N,i+1))+(shown>1?"–"+pad(Math.min(N,i+shown)):"")+" / "+N;
+      prev.disabled=st.scrollLeft<=2;next.disabled=st.scrollLeft>=max}
+    function go(d){var s=step(),per=Math.max(1,Math.floor((st.clientWidth+14)/s));st.scrollBy({left:d*per*s,behavior:"smooth"})}
+    prev.addEventListener("click",function(){go(-1)});next.addEventListener("click",function(){go(1)});
+    st.addEventListener("scroll",update,{passive:true});window.addEventListener("resize",update);
+    st.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){e.preventDefault();go(1)}else if(e.key==="ArrowLeft"){e.preventDefault();go(-1)}});
+    /* mouse drag (touch already scrolls natively) */
+    var down=false,x0=0,s0=0,moved=0;
+    st.addEventListener("pointerdown",function(e){if(e.pointerType!=="mouse"||e.button!==0)return;down=true;moved=0;x0=e.clientX;s0=st.scrollLeft;st.setPointerCapture(e.pointerId)});
+    st.addEventListener("pointermove",function(e){if(!down)return;var dx=e.clientX-x0;moved=Math.max(moved,Math.abs(dx));if(moved>4)st.classList.add("drag");st.scrollLeft=s0-dx});
+    function up(e){if(!down)return;down=false;if(st.classList.contains("drag")){var s=step(),t=Math.round(st.scrollLeft/s)*s;st.classList.remove("drag");st.scrollTo({left:t,behavior:"smooth"})}}
+    st.addEventListener("pointerup",up);st.addEventListener("pointercancel",up);
+    update();
+  })();
 
   /* ---------- the GDxDR mark, alive: same nodes and edges as the logo, turned in 3D ---------- */
   var cv=document.getElementById("morph"),ctx=cv.getContext("2d");

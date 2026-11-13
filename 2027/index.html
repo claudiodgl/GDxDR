@@ -333,7 +333,13 @@ footer .brand{font-size:1.4rem}
 :root[data-theme="light"] .person img{border:1.5px solid var(--paper)!important}
 :root[data-theme="light"] .person figcaption::before{height:3px;margin-top:-10px}
 .legend span:first-child::before{background:var(--gd)}
-.legend span:last-child::before{background:var(--dr)}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+.legend span:last-child::before{background:var(--dr)}.flag{display:inline-block;flex:none;width:1.3em;height:.86em;margin-left:.4em;vertical-align:-.06em;background:center/cover no-repeat;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
+.uni .flag{margin-left:.45em;vertical-align:-.1em}
+.nowrap{white-space:nowrap}
+.flag.se{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2010'%3E%3Crect%20width%3D'16'%20height%3D'10'%20fill%3D'%23006AA7'%2F%3E%3Crect%20x%3D'5'%20width%3D'2'%20height%3D'10'%20fill%3D'%23FECC02'%2F%3E%3Crect%20y%3D'4'%20width%3D'16'%20height%3D'2'%20fill%3D'%23FECC02'%2F%3E%3C%2Fsvg%3E")}
+.flag.nl{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%209%206'%3E%3Crect%20width%3D'9'%20height%3D'6'%20fill%3D'%2321468B'%2F%3E%3Crect%20width%3D'9'%20height%3D'4'%20fill%3D'%23fff'%2F%3E%3Crect%20width%3D'9'%20height%3D'2'%20fill%3D'%23AE1C28'%2F%3E%3C%2Fsvg%3E")}
+.flag.de{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%205%203'%3E%3Crect%20width%3D'5'%20height%3D'3'%20fill%3D'%23FFCE00'%2F%3E%3Crect%20width%3D'5'%20height%3D'2'%20fill%3D'%23DD0000'%2F%3E%3Crect%20width%3D'5'%20height%3D'1'%20fill%3D'%23000'%2F%3E%3C%2Fsvg%3E")}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 
 </head>
@@ -395,7 +401,7 @@ footer .brand{font-size:1.4rem}
         <p class="lede">Both fields project complex, high-dimensional structure into readable low-dimensional pictures. <span class="gd">GD</span>x<span class="dr">DR</span> brings the two communities into one room to compare methods, question evaluation practice, and plan work together.</p>
         <dl class="facts">
           <div><dt>Submit by</dt><dd>15 Feb 2027</dd></div>
-          <div><dt>Where</dt><dd>Stuttgart, Germany</dd></div>
+          <div><dt>Where</dt><dd>Stuttgart, <span class="nowrap">Germany<i class="flag de" role="img" aria-label="Germany flag"></i></span></dd></div>
           <div><dt>EuroVis 2027</dt><dd>31 May – 4 June 2027</dd></div>
         </dl>
       </div>
@@ -424,7 +430,7 @@ footer .brand{font-size:1.4rem}
         <div class="prose">
           <p><span class="gd">Graph drawing</span> and <span class="dr">dimensionality reduction</span> share many methodological, theoretical and practical challenges: scalability, ambiguity, and the reliability of what a layout appears to show. Yet the two communities often develop in parallel, with limited exchange of techniques, assumptions and evaluation practices.</p>
           <p>The workshop is a space for open, critical and constructive discussion where the fields meet. Core themes are common evaluation pitfalls and their alternatives, how domain experts actually use these methods, and reliability questions such as comparing real and synthetic user data.</p>
-          <p>The first <span class="gd">GD</span>x<span class="dr">DR</span> at EuroVis 2026 in Nottingham drew a full room and contributions from well-known researchers on both sides. The 2027 edition takes place at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a> in Stuttgart, Germany, from 31 May to 4 June 2027, hosted by the University of Stuttgart and Stuttgart Technical University of Applied Sciences. No prior expertise in <span class="gd">GD</span> or <span class="dr">DR</span> is needed to attend, and participation is not limited to authors.</p>
+          <p>The first <span class="gd">GD</span>x<span class="dr">DR</span> at EuroVis 2026 in Nottingham drew a full room and contributions from well-known researchers on both sides. The 2027 edition takes place at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a> in Stuttgart, <span class="nowrap">Germany<i class="flag de" role="img" aria-label="Germany flag"></i></span>, from 31 May to 4 June 2027, hosted by the University of Stuttgart and Stuttgart Technical University of Applied Sciences. No prior expertise in <span class="gd">GD</span> or <span class="dr">DR</span> is needed to attend, and participation is not limited to authors.</p>
         </div>
         <div class="goals">
           <article><span class="tag">Outcome 1</span><h3>A community statement</h3><p>A shared position on evaluation and methodology: the pitfalls both fields hit and what better practice looks like.</p></article>
@@ -495,12 +501,12 @@ footer .brand{font-size:1.4rem}
       <div class="rail"><h2>Program chairs</h2></div>
       <div class="body">
         <div class="people">
-          <figure class="person g"><img src="img/linhares.jpg" alt="Claudio D. G. Linhares" width="480" height="602" loading="lazy"><figcaption><span class="nm">Claudio D. G. Linhares</span><span class="af"><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i>Linnaeus University, SE</span></span></figcaption></figure>
-          <figure class="person d"><img src="img/martins.jpg" alt="Rafael M. Martins" width="480" height="602" loading="lazy"><figcaption><span class="nm">Rafael M. Martins</span><span class="af"><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i>Linnaeus University, SE</span></span></figcaption></figure>
-          <figure class="person g"><img src="img/arleo.jpg" alt="Alessio Arleo" width="480" height="602" loading="lazy"><figcaption><span class="nm">Alessio Arleo</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i>Eindhoven University of Technology, NL</span></span></figcaption></figure>
-          <figure class="person g"><img src="img/vandenelzen.jpg" alt="Stef van den Elzen" width="480" height="602" loading="lazy"><figcaption><span class="nm">Stef van den Elzen</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i>Eindhoven University of Technology, NL</span></span></figcaption></figure>
-          <figure class="person g"><img src="img/kerren.jpg" alt="Andreas Kerren" width="480" height="602" loading="lazy"><figcaption><span class="nm">Andreas Kerren</span><span class="af"><span class="uni"><i class="uni-ic liu" aria-hidden="true"></i>Linköping University, SE</span><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i>Linnaeus University, SE</span></span></figcaption></figure>
-          <figure class="person d"><img src="img/paulovich.jpg" alt="Fernando V. Paulovich" width="480" height="602" loading="lazy"><figcaption><span class="nm">Fernando V. Paulovich</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i>Eindhoven University of Technology, NL</span></span></figcaption></figure>
+          <figure class="person g"><img src="img/linhares.jpg" alt="Claudio D. G. Linhares" width="480" height="602" loading="lazy"><figcaption><span class="nm">Claudio D. G. Linhares</span><span class="af"><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i><span>Linnaeus University, SE<i class="flag se" role="img" aria-label="Sweden"></i></span></span></span></figcaption></figure>
+          <figure class="person d"><img src="img/martins.jpg" alt="Rafael M. Martins" width="480" height="602" loading="lazy"><figcaption><span class="nm">Rafael M. Martins</span><span class="af"><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i><span>Linnaeus University, SE<i class="flag se" role="img" aria-label="Sweden"></i></span></span></span></figcaption></figure>
+          <figure class="person g"><img src="img/arleo.jpg" alt="Alessio Arleo" width="480" height="602" loading="lazy"><figcaption><span class="nm">Alessio Arleo</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i><span>Eindhoven University of Technology, NL<i class="flag nl" role="img" aria-label="Netherlands"></i></span></span></span></figcaption></figure>
+          <figure class="person g"><img src="img/vandenelzen.jpg" alt="Stef van den Elzen" width="480" height="602" loading="lazy"><figcaption><span class="nm">Stef van den Elzen</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i><span>Eindhoven University of Technology, NL<i class="flag nl" role="img" aria-label="Netherlands"></i></span></span></span></figcaption></figure>
+          <figure class="person g"><img src="img/kerren.jpg" alt="Andreas Kerren" width="480" height="602" loading="lazy"><figcaption><span class="nm">Andreas Kerren</span><span class="af"><span class="uni"><i class="uni-ic liu" aria-hidden="true"></i><span>Linköping University, SE<i class="flag se" role="img" aria-label="Sweden"></i></span></span><span class="uni"><i class="uni-ic lnu" aria-hidden="true"></i><span>Linnaeus University, SE<i class="flag se" role="img" aria-label="Sweden"></i></span></span></span></figcaption></figure>
+          <figure class="person d"><img src="img/paulovich.jpg" alt="Fernando V. Paulovich" width="480" height="602" loading="lazy"><figcaption><span class="nm">Fernando V. Paulovich</span><span class="af"><span class="uni"><i class="uni-ic tue" aria-hidden="true"></i><span>Eindhoven University of Technology, NL<i class="flag nl" role="img" aria-label="Netherlands"></i></span></span></span></figcaption></figure>
         </div>
         <div class="legend mono" style="margin-top:8px"><span style="color:var(--gd)">Graph drawing &amp; network vis</span><span style="color:var(--dr)">Dimensionality reduction</span></div>
       </div>

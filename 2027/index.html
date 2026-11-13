@@ -316,6 +316,11 @@ footer .brand{font-size:1.4rem}
 :root[data-theme="light"] .wm-w{fill:#121310}
 :root[data-theme="light"] .wm-s{fill:#bbbdb2}
 :root[data-theme="light"] .wm-y{stroke:#121310;stroke-width:3;paint-order:stroke;stroke-linejoin:round}
+/* small wordmarks (header, footer): thicker outline so it still reads at ~26px */
+:root[data-theme="light"] .wm-mini .wm-c{stroke-width:8}
+:root[data-theme="light"] .wm-mini .wm-y{stroke-width:6}
+:root[data-theme="light"] .wm-mini.md .wm-c{stroke-width:6}
+:root[data-theme="light"] .wm-mini.md .wm-y{stroke-width:5}
 
 
 /* colour bar under each photo lives on the caption, so the grayscale filter on the photo cannot drain it */

@@ -57,12 +57,12 @@ nav.links::-webkit-scrollbar{display:none}
 nav.links a{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);text-decoration:none;white-space:nowrap;padding-block:6px}
 nav.links a:hover{color:var(--paper)}
 /* medium widths: keep every menu item visible by tightening the header */
-@media (min-width:861px) and (max-width:1240px){header.top .wrap{gap:16px}nav.links{gap:14px}nav.links a{letter-spacing:.03em;font-size:.74rem}.cta-full{display:none}.cta-short{display:inline}.cta{padding:8px 11px}.theme span{display:none}}
+@media (min-width:861px) and (max-width:1240px){header.top .wrap{gap:16px}nav.links{gap:14px}nav.links a{letter-spacing:.03em;font-size:.74rem}.cta .cta-full{display:none}.cta .cta-short{display:inline}.cta{padding:8px 11px}.theme span{display:none}}
 @media (max-width:860px){nav.links{display:none}.brand{margin-right:auto}}
 .cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:#000;background:var(--gd);border:1.5px solid var(--btn-line);padding:8px 14px;border-radius:2px;white-space:nowrap;transition:background .2s}
 .cta:hover{background:var(--dr)}
 .cta-short{display:none;text-transform:none;letter-spacing:.04em}
-@media (max-width:600px){.cta-full{display:none}.cta-short{display:inline}.cta{padding:8px 11px}header.top .wrap{gap:12px}}
+@media (max-width:600px){.cta .cta-full{display:none}.cta .cta-short{display:inline}.cta{padding:8px 11px}header.top .wrap{gap:12px}}
 
 /* hero */
 .hero{border-bottom:1px solid var(--line)}
@@ -164,6 +164,7 @@ section.band.active h2{color:var(--gd-t)}
 .date .when{font-family:var(--f-mono);font-size:.86rem;color:var(--mute);text-align:right}
 .date .when.tba{color:var(--gd-t)}
 .date.main .what{color:var(--dr-t)}
+.grad{background:linear-gradient(90deg,var(--gd-t),var(--dr-t));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:600}
 .note{color:var(--mute);font-size:.9rem;margin:0}
 
 /* people */
@@ -409,7 +410,7 @@ footer .brand{font-size:1.4rem}
           <div class="date"><span class="what">Paper submission deadline</span><span class="when">15 Feb 2027</span></div>
           <div class="date"><span class="what">Final notification</span><span class="when">31 Mar 2027</span></div>
           <div class="date"><span class="what">Camera-ready due</span><span class="when">15 Apr 2027</span></div>
-          <div class="date main"><span class="what"><span class="gd">GD</span>x<span class="dr">DR</span> '27 at EuroVis 2027, Stuttgart</span><span class="when tba">Day TBA · 31 May – 4 Jun</span></div>
+          <div class="date main"><span class="what"><span class="grad">GDxDR '27 at EuroVis 2027, Stuttgart</span></span><span class="when tba">Day TBA · 31 May – 4 Jun</span></div>
         </div>
         <p class="note">All deadlines are 23:59:59 Anywhere on Earth (AoE).</p>
       </div>

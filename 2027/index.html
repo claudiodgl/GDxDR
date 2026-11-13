@@ -114,6 +114,7 @@ h2{font-family:var(--f-dots);font-weight:900;font-size:var(--s3);line-height:1.0
 .body{min-width:0;display:flex;flex-direction:column;gap:28px}
 .prose{max-width:none;display:flex;flex-direction:column;gap:16px}
 .prose p{margin:0;color:var(--soft)}
+p.prose{display:block}  /* single-paragraph intros: keep inline GD/DR spans in the text flow */
 .big{font-family:var(--f-display);font-weight:400;font-style:italic;font-size:clamp(1.35rem,2.5vw,1.9rem);line-height:1.28;letter-spacing:-.01em;color:var(--paper);max-width:none;margin:0;text-wrap:balance}
 .big em{font-style:italic;color:var(--gd-t)}
 .big strong{font-weight:500;color:var(--dr-t)}

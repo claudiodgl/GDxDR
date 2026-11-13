@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="gdxdr-mark.svg">
+<title>GDxDR '27</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="GDxDR '27: Bridging Graph Drawing and Dimensionality Reduction. Second edition of the workshop, co-located with EuroVis 2027 in Stuttgart, Germany.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@500..900&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&family=Azeret+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: black stage taken from the logo; a live GD→DR morph is the hero, content runs in a 12-col grid with a mono "coordinate" rail on the left. */
+:root{
+  --ink:#000;            /* stage, matches logo background */
+  --panel:#0c0d0a;       /* raised surface, faint yellow-green bias */
+  --line:#24261f;        /* hairlines */
+  --mute:#8d917f;        /* secondary text */
+  --paper:#f3f4ec;       /* primary text */
+  --gd:#ffff00;          /* Graph Drawing, logo yellow */
+  --dr:#22ff22;          /* Dimensionality Reduction, logo green */
+  --gd-t:#ffff00; --dr-t:#22ff22;   /* GD / DR when used as small text */
+  --soft:#d6d8cc; --soft2:#c9ccbe; /* body copy tints */
+  --head-bg:rgba(0,0,0,.86); --btn-line:transparent;
+  --m-gd:#f5e400; --m-edge:#cdbd00; --m-dr:#2ee24a; --m-pj:#4fd8ff; --m-out:#000;  /* small logo mark */
+  --f-dots:"Doto","Courier New",monospace;  /* dot-matrix: letters made of points */
+  --f-display:"Literata",Georgia,"Times New Roman",serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-mono:"Azeret Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --s-1:.8125rem; --s0:1.0625rem; --s1:1.3rem; --s2:1.75rem; --s3:2.6rem; --s4:clamp(2.5rem,6.2vw,5.2rem);
+  --maxw:1200px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--ink);color:var(--paper);font-family:var(--f-body);font-size:1rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gd);outline-offset:3px}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+.gd{color:var(--gd-t)} .dr{color:var(--dr-t)}
+.mono{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.04em}
+
+/* nav */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--head-bg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-dots);font-weight:900;font-size:1.2rem;letter-spacing:0;white-space:nowrap}
+.brand b{font-weight:900}
+.brand .x{color:var(--paper);font-size:.8em;margin-inline:1px}
+.brand .yr{font-family:var(--f-mono);font-weight:600;font-size:.72rem;color:var(--mute);border:1px solid var(--line);padding:2px 6px;border-radius:3px;letter-spacing:.06em}
+nav.links{display:flex;gap:22px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav.links::-webkit-scrollbar{display:none}
+nav.links a{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);text-decoration:none;white-space:nowrap;padding-block:6px}
+nav.links a:hover{color:var(--paper)}
+@media (max-width:860px){nav.links{display:none}.brand{margin-right:auto}}
+.cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;color:#000;background:var(--gd);border:1.5px solid var(--btn-line);padding:8px 14px;border-radius:2px;white-space:nowrap;transition:background .2s}
+.cta:hover{background:var(--dr)}
+
+/* hero */
+.hero{border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;padding-block:40px 48px}
+@media (min-width:900px){.hero .wrap{padding-block:56px 72px}}
+.hero-copy{min-width:0;display:flex;flex-direction:column;gap:26px}
+.mark{display:block;flex:none;overflow:visible}
+.mark.sm{width:34px;height:31px}
+.mark.md{width:52px;height:47px}
+.mark.lg{width:clamp(76px,12vw,124px);height:clamp(76px,12vw,124px)}
+.mark.lg .proj{animation:drip 2.4s linear infinite}
+@keyframes drip{to{stroke-dashoffset:-12}}
+.lockup{--lw:clamp(190px,30vw,340px);--lh:calc(var(--lw) * 180 / 424);display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.6vw,18px);min-width:0;padding-block:8px 12px}
+.logo{width:calc(var(--lh) * 476 / 180);height:var(--lh);flex:none;display:block;overflow:visible}
+.eyebrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;color:var(--mute)}
+.eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}color:var(--ink);background:var(--paper);padding:3px 8px;border-radius:2px;font-weight:600}
+h1{font-family:var(--f-dots);font-weight:900;font-size:clamp(1.9rem,5vw,4.2rem);overflow-wrap:break-word;line-height:1;letter-spacing:0;margin:0;text-wrap:balance}
+h1 .and{display:block;font-family:var(--f-mono);font-weight:400;font-size:.26em;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin:.55em 0 .5em}
+.lede{max-width:none;color:var(--soft2);font-size:var(--s1);line-height:1.5;margin:0}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.facts div{padding:12px 14px 12px 0;min-width:0}
+.facts div+div{padding-left:14px;border-left:1px solid var(--line)}
+.facts dt{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mute)}
+.facts dd{margin:2px 0 0;font-family:var(--f-display);font-weight:700;font-stretch:105%;font-size:1.02rem;line-height:1.25}
+@media (max-width:480px){.facts{grid-template-columns:minmax(0,1fr)}.facts div+div{border-left:0;padding-left:0;border-top:1px solid var(--line)}}
+
+.stage{position:relative;flex:none;width:var(--lh);height:var(--lh)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{position:absolute;left:0;right:0;display:flex;justify-content:space-between;gap:12px;padding:10px 12px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;color:var(--mute);pointer-events:none}
+.hud.t{top:0}.hud.b{bottom:0}
+.hud .k{color:var(--paper)}
+.meter{position:relative;flex:1;max-width:160px;height:2px;background:var(--line);align-self:center}
+.meter i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--gd),var(--dr))}
+.stage button{position:absolute;right:10px;bottom:34px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--line);padding:5px 8px;border-radius:2px;cursor:pointer}
+.stage button:hover{color:var(--paper);border-color:var(--mute)}
+
+/* sections */
+section.band{border-bottom:1px solid var(--line)}
+section.band>.wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:20px 48px;padding-block:64px}
+@media (min-width:900px){section.band>.wrap{grid-template-columns:220px minmax(0,1fr);padding-block:88px}}
+.rail{display:flex;flex-direction:column;gap:6px;align-self:start}
+@media (min-width:900px){.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}}
+.rail .coord{font-family:var(--f-mono);font-size:.72rem;color:var(--mute);letter-spacing:.06em}
+.rail .coord b{color:var(--gd);font-weight:600}
+.rail .coord b.d{color:var(--dr)}
+h2{font-family:var(--f-dots);font-weight:900;font-size:var(--s3);line-height:1.05;letter-spacing:0;margin:0;text-wrap:balance}
+@media (max-width:899px){h2{font-size:var(--s2)}}
+.body{min-width:0;display:flex;flex-direction:column;gap:28px}
+.prose{max-width:none;display:flex;flex-direction:column;gap:16px}
+.prose p{margin:0;color:var(--soft)}
+.big{font-family:var(--f-display);font-weight:400;font-style:italic;font-size:clamp(1.35rem,2.5vw,1.9rem);line-height:1.28;letter-spacing:-.01em;color:var(--paper);max-width:none;margin:0;text-wrap:balance}
+.big em{font-style:italic;color:var(--gd-t)}
+.big strong{font-weight:500;color:var(--dr-t)}
+h3{font-family:var(--f-display);font-weight:750;font-stretch:108%;font-size:var(--s1);line-height:1.2;margin:0}
+
+/* goals */
+.goals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.goals article{background:var(--ink);padding:22px;display:flex;flex-direction:column;gap:8px}
+.goals p{margin:0;color:var(--mute);font-size:.98rem}
+.goals .tag{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dr-t)}
+
+/* topics */
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:0 40px;border-top:1px solid var(--line)}
+.topic{display:flex;flex-direction:column;gap:4px;padding:18px 0;border-bottom:1px solid var(--line);min-width:0}
+.topic p{margin:0;color:var(--mute);font-size:.95rem}
+
+/* active section */
+nav.links a.active{color:var(--paper);box-shadow:inset 0 -2px 0 var(--gd)}
+h2{transition:color .3s}
+section.band.active h2{color:var(--gd-t)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--mute)}
+.legend span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--paper)}
+
+/* formats */
+.formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px}
+.format{border:1px solid var(--line);background:var(--panel);padding:26px;display:flex;flex-direction:column;gap:12px}
+.format .pages{font-family:var(--f-dots);font-weight:900;font-size:3.4rem;line-height:.9;letter-spacing:0}
+.format .pages small{font-family:var(--f-mono);font-weight:400;font-size:.8rem;letter-spacing:.06em;color:var(--mute);margin-left:8px}
+.format p{margin:0;color:var(--soft2);font-size:.98rem}
+.checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px 32px}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;color:var(--soft);font-size:.98rem}
+.checks li::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--gd);margin:.5em 0 0 4px;box-shadow:0 0 0 1.5px var(--btn-line)}
+.checks li:nth-child(even)::before{background:var(--dr)}
+.checks a{text-decoration-color:var(--mute);text-underline-offset:3px}
+.checks .tba{font-family:var(--f-mono);font-weight:600;color:var(--gd-t)}text-decoration-color:var(--gd)}
+
+/* dates */
+.dates{border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.date{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.date .what{font-family:var(--f-display);font-weight:650;font-stretch:105%;font-size:1.12rem}
+.date .when{font-family:var(--f-mono);font-size:.86rem;color:var(--mute);text-align:right}
+.date .when.tba{color:var(--gd-t)}
+.date.main .what{color:var(--dr-t)}
+.note{color:var(--mute);font-size:.9rem;margin:0}
+
+/* people */
+.orgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:32px}
+.org h3{font-family:var(--f-mono);font-weight:600;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.org ul{list-style:none;margin:0;padding:0}
+.org li{font-family:var(--f-display);font-weight:600;font-stretch:104%;font-size:1.25rem;padding:8px 0;line-height:1.25}
+
+.org li small{display:block;font-family:var(--f-mono);font-weight:400;font-size:.7rem;letter-spacing:.06em;color:var(--mute);margin-top:2px}
+
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:28px 20px}
+@media (max-width:420px){.people{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.person{margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+.person img{width:100%;max-width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);border-bottom:3px solid var(--gd);transition:filter .35s}
+.person.d img{border-bottom-color:var(--dr)}
+.person:hover img{filter:none}
+.person figcaption{display:flex;flex-direction:column;gap:3px}
+.person .nm{font-family:var(--f-display);font-weight:700;font-stretch:104%;font-size:1.05rem;line-height:1.2}
+.person .af{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.04em;color:var(--mute);line-height:1.4}
+
+/* program */
+.sched{border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.slot{display:grid;grid-template-columns:minmax(0,1fr);gap:2px 28px;padding:16px 0 16px 16px;border-bottom:1px solid var(--line);border-left:3px solid transparent}
+@media (min-width:600px){.slot{grid-template-columns:130px minmax(0,1fr);align-items:baseline}}
+.slot .time{font-family:var(--f-mono);font-size:.86rem;color:var(--mute)}
+.slot .what{font-family:var(--f-display);font-weight:650;font-stretch:105%;font-size:1.12rem;line-height:1.3}
+.slot .what small{display:block;font-family:var(--f-body);font-weight:400;font-stretch:100%;font-size:.92rem;color:var(--mute);margin-top:2px}
+.slot.key{border-left-color:var(--gd)}
+.slot.act{border-left-color:var(--dr)}
+.slot.brk .what{color:var(--mute);font-weight:500}
+
+/* 2026 stats + special issue */
+.stats dd{font-size:2rem;font-weight:900;font-stretch:120%}
+.si{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;border:1px solid var(--gd);padding:20px 22px}
+.si .mono{flex-basis:100%}
+.si p{margin:0;flex:1 1 320px;min-width:0;color:#d6d8cc}
+.si strong{color:var(--paper)}
+.si .dl{color:var(--gd);font-weight:600;white-space:nowrap}
+
+/* archive */
+.archive{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+@media (min-width:900px){.archive{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}}
+.keynote{border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:10px;align-self:start}
+.keynote .name{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:1.5rem;line-height:1.1}
+.keynote p{margin:0;color:var(--mute);font-size:.96rem}
+.papers{list-style:none;margin:0;padding:0;counter-reset:p;border-top:1px solid var(--line)}
+.papers li{counter-increment:p;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
+.papers li::before{content:counter(p,decimal-leading-zero);font-family:var(--f-mono);font-size:.74rem;color:var(--dr);padding-top:3px}
+.papers .t{display:block;font-weight:600;line-height:1.35}
+.papers .a{display:block;font-size:.88rem;color:var(--mute)}
+.linkrow{display:flex;flex-wrap:wrap;gap:10px}
+.ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--paper);border:1px solid var(--line);padding:9px 12px;border-radius:2px;transition:border-color .2s,color .2s}
+.ghost:hover{border-color:var(--gd);color:var(--gd-t)}
+
+/* 2026 photo strip */
+.gal-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.gal-bar p{margin:0;color:var(--soft);flex:1 1 280px;min-width:0}
+.gal-nav{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.76rem;letter-spacing:.06em;color:var(--mute);font-variant-numeric:tabular-nums}
+.gal-nav button{width:38px;height:38px;display:inline-grid;place-items:center;border:1px solid var(--line);border-radius:2px;background:transparent;color:var(--paper);cursor:pointer;font-size:1.05rem;line-height:1}
+.gal-nav button:hover:not(:disabled){border-color:var(--gd);color:var(--gd-t)}
+.gal-nav button:disabled{opacity:.35;cursor:default}
+.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--gd) transparent;cursor:grab;-webkit-overflow-scrolling:touch}
+.strip.drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.strip:focus-visible{outline:2px solid var(--gd);outline-offset:4px}
+.strip::-webkit-scrollbar{height:6px}
+.strip::-webkit-scrollbar-thumb{background:var(--gd);border-radius:3px}
+.strip figure{margin:0;flex:0 0 auto;width:clamp(230px,30vw,340px);scroll-snap-align:start;position:relative}
+.strip img{width:100%;max-width:100%;height:auto;aspect-ratio:1;object-fit:cover;display:block;border-bottom:3px solid var(--gd);pointer-events:none;-webkit-user-drag:none}
+.strip figure:nth-child(even) img{border-bottom-color:var(--dr)}
+.strip figcaption{position:absolute;left:10px;top:10px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:2px}
+:root[data-theme="light"] .strip img{border:1.5px solid var(--paper);border-bottom:4px solid var(--gd)}
+:root[data-theme="light"] .strip figure:nth-child(even) img{border-bottom-color:var(--dr)}
+:root[data-theme="light"] .gal-nav button{border-color:var(--paper)}
+[hidden]{display:none!important}
+
+/* 2026 photos as framed prints that flip on their own */
+.deck{--frame:#f3f2ea;--frame-ink:#3a3c33;display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:clamp(18px,3.4vw,40px);padding:14px 8px 10px}
+.deck:empty{display:none}
+.pf{position:relative;perspective:1400px;transform:rotate(var(--r,0deg));transition:transform .45s ease}
+.pf:nth-child(3n+1){--r:-2.2deg}.pf:nth-child(3n+2){--r:1.6deg;margin-top:14px}.pf:nth-child(3n){--r:-.9deg;margin-top:4px}
+.pf:hover{transform:rotate(0deg) translateY(-6px)}
+.pf .flip{display:grid;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.55,.05,.25,1)}
+.pf .flip.turned{transform:rotateY(180deg)}
+.pf .face{grid-area:1/1;margin:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--frame);padding:10px 10px 0;box-shadow:0 1px 1px rgba(0,0,0,.35),0 18px 34px -14px rgba(0,0,0,.7)}
+.pf .face.back{transform:rotateY(180deg)}
+.pf img{width:100%;max-width:100%;height:auto;aspect-ratio:1;object-fit:cover;display:block;background:#2a2c25}
+.pf figcaption{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;color:var(--frame-ink);padding:11px 2px 13px}
+.pf figcaption span{display:inline-flex;align-items:center;gap:7px}
+.pf figcaption span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--gd);box-shadow:0 0 0 1.5px #121310}
+.pf .face.alt figcaption span::before{background:var(--dr)}
+:root[data-theme="light"] .deck{--frame:#ffffff}
+:root[data-theme="light"] .pf .face{outline:1.5px solid var(--paper);box-shadow:0 14px 26px -16px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.pf .flip{transition:none}}
+:root[data-theme="light"] .strip{scrollbar-color:var(--paper) transparent}
+:root[data-theme="light"] .strip::-webkit-scrollbar-thumb{background:var(--paper)}
+
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;padding-block:36px;color:var(--mute)}
+footer .brand{font-size:1.4rem}
+
+/* theme switch */
+.theme{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:2px;background:transparent;color:var(--paper);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;flex:none}
+.theme:hover{border-color:var(--mute)}
+.theme svg{width:15px;height:15px}
+.theme .sun{display:none}
+:root[data-theme="light"] .theme .sun{display:block}
+:root[data-theme="light"] .theme .moon{display:none}
+@media (max-width:480px){.theme span{display:none}}
+
+/* light mode: bright GD/DR stay as fills and highlighter bands; text on paper goes dark */
+:root[data-theme="light"]{
+  --ink:#f7f7f2; --panel:#ffffff; --line:#cfd1c4; --mute:#585c4e; --paper:#121310;
+  --soft:#2a2c25; --soft2:#33362d;
+  --gd:#ffeb00; --dr:#2ee24a; --gd-t:#6b6100; --dr-t:#087a1c;
+  --head-bg:rgba(247,247,242,.9); --btn-line:#121310;
+  --m-gd:#ffe600; --m-edge:#b8a000; --m-dr:#22c43f; --m-pj:#0b8fc4; --m-out:#121310;
+  color-scheme:light;
+}
+:root[data-theme="light"] h1 .gd,:root[data-theme="light"] h1 .dr,
+:root[data-theme="light"] .big em,:root[data-theme="light"] .big strong,
+:root[data-theme="light"] section.band.active h2{color:var(--paper);background:linear-gradient(transparent 58%,var(--gd) 58%,var(--gd) 92%,transparent 92%);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding-inline:.06em}
+:root[data-theme="light"] h1 .dr,:root[data-theme="light"] .big strong{background:linear-gradient(transparent 58%,var(--dr) 58%,var(--dr) 92%,transparent 92%)}
+:root[data-theme="light"] .brand b{color:var(--paper);background:var(--gd);padding:0 3px;border:1.5px solid var(--paper)}
+:root[data-theme="light"] .brand b.dr{background:var(--dr)}
+:root[data-theme="light"] .eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}color:var(--ink)}
+:root[data-theme="light"] .format{border-color:var(--paper)}
+:root[data-theme="light"] .ghost{border-color:var(--paper)}
+:root[data-theme="light"] .ghost:hover{background:var(--gd);color:#000}
+:root[data-theme="light"] .person img{border:1.5px solid var(--paper);border-bottom:4px solid var(--gd)}
+:root[data-theme="light"] .person.d img{border-bottom-color:var(--dr)}
+:root[data-theme="light"] .slot.key,:root[data-theme="light"] .slot.act{box-shadow:inset 1px 0 0 var(--paper)}
+:root[data-theme="light"] nav.links a.active{box-shadow:inset 0 -3px 0 var(--gd),inset 0 -4.5px 0 var(--paper)}
+:root[data-theme="light"] .legend span{color:var(--paper)!important}
+:root[data-theme="light"] .legend span:first-child::before{background:var(--gd);box-shadow:0 0 0 1.5px var(--paper)}
+:root[data-theme="light"] .legend span:last-child::before{background:var(--dr);box-shadow:0 0 0 1.5px var(--paper)}
+/* wordmark + mark get dark outlines on paper */
+:root[data-theme="light"] .wm-c{stroke:#121310;stroke-width:3;paint-order:stroke;stroke-linejoin:round}
+:root[data-theme="light"] .wm-w{fill:#121310}
+:root[data-theme="light"] .wm-s{fill:#bbbdb2}
+:root[data-theme="light"] .wm-y{stroke:#121310;stroke-width:3;paint-order:stroke;stroke-linejoin:round}
+
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="8 8 124 124">
+    <ellipse cx="70" cy="104" rx="54" ry="16" stroke="#2ee24a" stroke-width="2" opacity="0.6" fill="none"/>
+    <path d="M32 40 L48 24 M64 30 L86 18 M98 38 L116 28 M52 58 L70 46 M48 24 L64 30 M86 18 L98 38 M70 46 L86 18 M32 40 L52 58" stroke="#f5e400" stroke-width="2" opacity="0.8" stroke-linecap="round" fill="none"/>
+    <path class="proj" d="M32 40 V98 M48 24 V96 M64 30 V102 M86 18 V110 M98 38 V108 M116 28 V100 M52 58 V112 M70 46 V106" stroke="#4fd8ff" stroke-width="1" stroke-dasharray="2 4" opacity="0.7" fill="none"/>
+    <g fill="#f5e400"><circle cx="32" cy="40" r="4"/><circle cx="48" cy="24" r="4"/><circle cx="64" cy="30" r="4"/><circle cx="86" cy="18" r="4"/><circle cx="98" cy="38" r="4"/><circle cx="116" cy="28" r="4"/><circle cx="52" cy="58" r="4"/><circle cx="70" cy="46" r="4"/></g>
+    <g fill="#2ee24a"><circle cx="32" cy="98" r="3"/><circle cx="48" cy="96" r="3"/><circle cx="64" cy="102" r="3"/><circle cx="86" cy="110" r="3"/><circle cx="98" cy="108" r="3"/><circle cx="116" cy="100" r="3"/><circle cx="52" cy="112" r="3"/><circle cx="70" cy="106" r="3"/></g>
+  </symbol>
+  <symbol id="mark-sm" viewBox="6 6 128 116">
+    <ellipse cx="70" cy="104" rx="54" ry="16" stroke="var(--m-dr)" stroke-width="5" fill="none"/>
+    <path d="M32 98 V40 M48 96 V24 M64 102 V30 M86 110 V18 M98 108 V38 M116 100 V28 M52 112 V58 M70 106 V46" stroke="var(--m-pj)" stroke-width="3" stroke-dasharray="5 6" fill="none"/>
+    <path d="M32 40 L48 24 M64 30 L86 18 M98 38 L116 28 M52 58 L70 46 M48 24 L64 30 M86 18 L98 38 M70 46 L86 18 M32 40 L52 58" stroke="var(--m-edge)" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <g fill="var(--m-gd)" stroke="var(--m-out)" stroke-width="2.5"><circle cx="32" cy="40" r="8"/><circle cx="48" cy="24" r="8"/><circle cx="64" cy="30" r="8"/><circle cx="86" cy="18" r="8"/><circle cx="98" cy="38" r="8"/><circle cx="116" cy="28" r="8"/><circle cx="52" cy="58" r="8"/><circle cx="70" cy="46" r="8"/></g>
+    <g fill="var(--m-dr)" stroke="var(--m-out)" stroke-width="2.5"><circle cx="32" cy="98" r="6.5"/><circle cx="48" cy="96" r="6.5"/><circle cx="64" cy="102" r="6.5"/><circle cx="86" cy="110" r="6.5"/><circle cx="98" cy="108" r="6.5"/><circle cx="116" cy="100" r="6.5"/><circle cx="52" cy="112" r="6.5"/><circle cx="70" cy="106" r="6.5"/></g>
+  </symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="GDxDR 2027 home"><svg class="mark sm" aria-hidden="true"><use href="#mark-sm"/></svg><b class="gd">GD</b><span class="x">×</span><b class="dr">DR</b><span class="yr">'27</span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#topics">Topics</a>
+      <a href="#call">Call</a>
+      <a href="#dates">Dates</a>
+      <a href="#program">Program</a>
+      <a href="#people">Organizers</a>
+      <a href="#photos">GDxDR '26</a>
+    </nav>
+    <button class="theme" id="theme" type="button" aria-label="Switch to light mode" aria-pressed="false"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg><span id="themeLabel">Light</span></button>
+    <a class="cta" href="#call">Call for papers</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <div class="lockup">
+          <div class="stage" role="img" aria-label="Animated GDxDR mark: graph nodes projected onto a plane"><canvas id="morph"></canvas></div>
+          <svg class="logo" viewBox="118 30 476 180" role="img" aria-label="GD × DR Workshop 2027">
+            <defs><linearGradient id="yr" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffff00"/><stop offset="1" stop-color="#22ff22"/></linearGradient></defs>
+            <g font-family="Arial, 'Helvetica Neue', Helvetica, 'Liberation Sans', sans-serif" font-weight="700">
+              <text x="292" y="140" text-anchor="end" font-size="118" fill="#ffff00" letter-spacing="-2" class="wm-c">GD</text>
+              <text x="333" y="128" text-anchor="middle" font-size="64" fill="#555" class="wm-s">×</text>
+              <text x="330" y="125" text-anchor="middle" font-size="64" fill="#fff" class="wm-w">×</text>
+              <text x="368" y="140" text-anchor="start" font-size="118" fill="#22ff22" letter-spacing="-2" class="wm-c">DR</text>
+              <text x="330" y="196" text-anchor="middle" font-size="34" fill="#fff" class="wm-w">Workshop</text>
+              <text x="534" y="76" text-anchor="start" font-size="44" fill="url(#yr)" letter-spacing="-1" class="wm-y">'27</text>
+            </g>
+          </svg>
+        </div>
+        <div class="eyebrow mono"><span class="pill">2nd edition</span><span>Half-day workshop at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a></span></div>
+        <h1>Bridging <span class="gd">Graph Drawing</span> and <span class="dr">Dimension&shy;ality Reduction</span></h1>
+        <p class="lede">Both fields project complex, high-dimensional structure into readable low-dimensional pictures. GDxDR brings the two communities into one room to compare methods, question evaluation practice, and plan work together.</p>
+        <dl class="facts">
+          <div><dt>Submit by</dt><dd>15 Feb 2027</dd></div>
+          <div><dt>Where</dt><dd>Stuttgart, Germany</dd></div>
+          <div><dt>EuroVis 2027</dt><dd>31 May – 4 June 2027</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="about">
+    <div class="wrap">
+      <div class="rail"><h2>About</h2></div>
+      <div class="body">
+        <p class="big">A node-link diagram and a t-SNE plot are two answers to one question: <em>where should related things sit</em> so that <strong>distance means something</strong>?</p>
+        <div class="prose">
+          <p>Graph drawing and dimensionality reduction share many methodological, theoretical and practical challenges: scalability, ambiguity, and the reliability of what a layout appears to show. Yet the two communities often develop in parallel, with limited exchange of techniques, assumptions and evaluation practices.</p>
+          <p>The workshop is a space for open, critical and constructive discussion where the fields meet. Core themes are common evaluation pitfalls and their alternatives, how domain experts actually use these methods, and reliability questions such as comparing real and synthetic user data.</p>
+          <p>The first GDxDR at EuroVis 2026 in Nottingham drew a full room and contributions from well-known researchers on both sides. The 2027 edition takes place at <a href="https://eurovis27.github.io/web/" target="_blank" rel="noopener">EuroVis 2027</a> in Stuttgart, Germany, from 31 May to 4 June 2027, hosted by the University of Stuttgart and Stuttgart Technical University of Applied Sciences. No prior expertise in GD or DR is needed to attend, and participation is not limited to authors.</p>
+        </div>
+        <div class="goals">
+          <article><span class="tag">Outcome 1</span><h3>A community statement</h3><p>A shared position on evaluation and methodology: the pitfalls both fields hit and what better practice looks like.</p></article>
+          <article><span class="tag">Outcome 2</span><h3>A roadmap</h3><p>How each field can benefit from the other, with open challenges and research directions mapped by participants.</p></article>
+          <article><span class="tag">Outcome 3</span><h3>New collaborations</h3><p>Connections across GD and DR groups that lead to joint projects, co-authored papers and future editions.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="topics">
+    <div class="wrap">
+      <div class="rail"><h2>Topics</h2></div>
+      <div class="body">
+        <p class="prose" style="margin:0;color:var(--soft)">We welcome work on any connection between the two fields, including:</p>
+        <div class="topics">
+          <div class="topic"><h3>Shared methods and theory</h3><p>How principles from graph theory inform DR and vice versa: stress, neighbourhoods, embeddings, layouts.</p></div>
+          <div class="topic"><h3>Evaluation pitfalls and alternatives</h3><p>Quality metrics that are correlated, conflicting or insufficient alone, and better evaluation strategies.</p></div>
+          <div class="topic"><h3>Interpretability and trust</h3><p>Stability, trustworthiness and embedding quality, and how people read and trust the result.</p></div>
+          <div class="topic"><h3>Reliability of user data</h3><p>Comparing real and synthetic user data in studies and benchmarks.</p></div>
+          <div class="topic"><h3>Scalability and ambiguity</h3><p>Methods and metrics that hold up for large networks and high-dimensional data.</p></div>
+          <div class="topic"><h3>Domain-expert usage scenarios</h3><p>Case studies and applications where one field successfully informed the other.</p></div>
+          <div class="topic"><h3>Network visualization</h3><p>Multivariate and multilayer networks, node types, flow and dynamics where they meet embedding techniques.</p></div>
+          <div class="topic"><h3>Critiques of current practice</h3><p>Assumptions both communities make about readability and faithfulness.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="call">
+    <div class="wrap">
+      <div class="rail"><h2>Call for papers</h2></div>
+      <div class="body">
+        <p class="prose" style="margin:0;color:var(--soft)">We invite researchers, practitioners and educators interested in the connections between GD and DR, from established scholars to early-career researchers. We particularly encourage work that shows cross-domain relevance, proposes new methodological approaches, or reports on concrete application scenarios.</p>
+        <div class="formats">
+          <div class="format"><span class="mono gd">Short paper</span><span class="pages">4<small>pages incl. references</small></span><p>Case studies, usage scenarios, comparative analyses or methodological contributions that highlight links between GD and DR. Empirical studies, critiques of current practice, new evaluation strategies, and reports where one field successfully informed the other are all welcome.</p></div>
+          <div class="format"><span class="mono dr">Review</span><span class="pages">2+<small>reviewers per paper</small></span><p>At least one reviewer is a member of the program committee. Papers are judged on clarity, relevance and potential to stimulate discussion. Novel insights and critical reflection count as much as empirical rigour.</p></div>
+        </div>
+        <ul class="checks">
+          <li><span>Accepted papers are published in the <a href="https://diglib.eg.org/" target="_blank" rel="noopener">Eurographics Digital Library</a>.</span></li>
+          <li><span>Accepted papers are presented as lightning talks of 5–10 minutes, leaving time for discussion.</span></li>
+          <li><span>Papers are submitted through <a href="https://new.precisionconference.com/" target="_blank" rel="noopener">PCS (Precision Conference System)</a>.</span></li>
+          <li><span>Submission opening, paper template and copyright form: <strong class="tba">TBA</strong>.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="dates">
+    <div class="wrap">
+      <div class="rail"><h2>Important dates</h2></div>
+      <div class="body">
+        <div class="dates">
+          <div class="date"><span class="what">Paper submission deadline</span><span class="when">15 Feb 2027</span></div>
+          <div class="date"><span class="what">Final notification</span><span class="when">31 Mar 2027</span></div>
+          <div class="date"><span class="what">Camera-ready due</span><span class="when">15 Apr 2027</span></div>
+          <div class="date main"><span class="what">GDxDR '27 at EuroVis 2027, Stuttgart</span><span class="when tba">Day TBA · 31 May – 4 Jun</span></div>
+        </div>
+        <p class="note">All deadlines are 23:59:59 Anywhere on Earth (AoE).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="program">
+    <div class="wrap">
+      <div class="rail"><h2>Program</h2><span class="mono" style="color:var(--mute)">Preliminary · half day</span></div>
+      <div class="body">
+        <div class="sched">
+          <div class="slot"><span class="time">14:00–14:10</span><span class="what">Welcome and recap of GDxDR 2026</span></div>
+          <div class="slot key"><span class="time">14:10–15:15</span><span class="what">Invited keynote: Bridging GD and DR<small>followed by Q&amp;A</small></span></div>
+          <div class="slot"><span class="time">15:15–16:15</span><span class="what">Paper session<small>short papers, 5–10 minutes each with discussion</small></span></div>
+          <div class="slot brk"><span class="time">16:15–16:30</span><span class="what">Coffee break</span></div>
+          <div class="slot act"><span class="time">16:30–17:15</span><span class="what">Group activity<small>mapping synergies, challenges and opportunities across GD and DR</small></span></div>
+          <div class="slot"><span class="time">17:15–17:30</span><span class="what">Closing remarks</span></div>
+        </div>
+        <p class="note">Keynote speaker to be announced.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="people">
+    <div class="wrap">
+      <div class="rail"><h2>Organizers</h2></div>
+      <div class="body">
+        <div class="legend mono"><span style="color:var(--gd)">Graph drawing &amp; network vis</span><span style="color:var(--dr)">Dimensionality reduction</span></div>
+        <div class="people">
+          <figure class="person g"><img src="img/linhares.jpg" alt="Claudio D. G. Linhares" width="480" height="602" loading="lazy"><figcaption><span class="nm">Claudio D. G. Linhares</span><span class="af">Linnaeus University, SE</span></figcaption></figure>
+          <figure class="person d"><img src="img/martins.jpg" alt="Rafael M. Martins" width="480" height="602" loading="lazy"><figcaption><span class="nm">Rafael M. Martins</span><span class="af">Linnaeus University, SE</span></figcaption></figure>
+          <figure class="person g"><img src="img/arleo.jpg" alt="Alessio Arleo" width="480" height="602" loading="lazy"><figcaption><span class="nm">Alessio Arleo</span><span class="af">Eindhoven University of Technology, NL</span></figcaption></figure>
+          <figure class="person g"><img src="img/vandenelzen.jpg" alt="Stef van den Elzen" width="480" height="602" loading="lazy"><figcaption><span class="nm">Stef van den Elzen</span><span class="af">Eindhoven University of Technology, NL</span></figcaption></figure>
+          <figure class="person g"><img src="img/kerren.jpg" alt="Andreas Kerren" width="480" height="602" loading="lazy"><figcaption><span class="nm">Andreas Kerren</span><span class="af">Linnaeus University &amp; Linköping University, SE</span></figcaption></figure>
+          <figure class="person d"><img src="img/paulovich.jpg" alt="Fernando V. Paulovich" width="480" height="602" loading="lazy"><figcaption><span class="nm">Fernando V. Paulovich</span><span class="af">Eindhoven University of Technology, NL</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="photos">
+    <div class="wrap">
+      <div class="rail"><h2>GDxDR '26</h2><span class="mono" style="color:var(--mute)">EuroVis 2026 · Nottingham</span></div>
+      <div class="body">
+        <div class="gal-bar">
+          <p>Scenes from the first edition at EuroVis 2026 in Nottingham.</p>
+          <div class="gal-nav" id="galNav" hidden><button type="button" id="galPlay" aria-label="Pause slideshow" aria-pressed="false">❚❚</button><button type="button" id="galNext" aria-label="Next photo">→</button></div>
+        </div>
+        <div class="deck" id="deck" aria-live="off"></div>
+        <div class="strip" id="strip" tabindex="0" role="region" aria-label="Photos from GDxDR 2026">
+<figure><img src="img/gdxdr26/p01.jpg" alt="Opening of GDxDR '26 at EuroVis 2026" width="900" height="900" loading="eager" decoding="async"><figcaption>01</figcaption></figure>
+          <figure><img src="img/gdxdr26/p02.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="eager" decoding="async"><figcaption>02</figcaption></figure>
+          <figure><img src="img/gdxdr26/p03.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="eager" decoding="async"><figcaption>03</figcaption></figure>
+          <figure><img src="img/gdxdr26/p04.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>04</figcaption></figure>
+          <figure><img src="img/gdxdr26/p05.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>05</figcaption></figure>
+          <figure><img src="img/gdxdr26/p06.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>06</figcaption></figure>
+          <figure><img src="img/gdxdr26/p07.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>07</figcaption></figure>
+          <figure><img src="img/gdxdr26/p08.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>08</figcaption></figure>
+          <figure><img src="img/gdxdr26/p09.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>09</figcaption></figure>
+          <figure><img src="img/gdxdr26/p10.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>10</figcaption></figure>
+          <figure><img src="img/gdxdr26/p11.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>11</figcaption></figure>
+          <figure><img src="img/gdxdr26/p12.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>12</figcaption></figure>
+          <figure><img src="img/gdxdr26/p13.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>13</figcaption></figure>
+          <figure><img src="img/gdxdr26/p14.jpg" alt="Audience at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>14</figcaption></figure>
+          <figure><img src="img/gdxdr26/p15.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>15</figcaption></figure>
+          <figure><img src="img/gdxdr26/p16.jpg" alt="Paper presentation at GDxDR '26" width="900" height="900" loading="lazy" decoding="async"><figcaption>16</figcaption></figure>
+        </div>
+        <div class="linkrow"><a class="ghost" href="https://sites.google.com/view/gdxdr26/home" target="_blank" rel="noopener">GDxDR '26 website ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><svg class="mark md" aria-hidden="true"><use href="#mark-sm"/></svg><b class="gd">GD</b><span class="x">×</span><b class="dr">DR</b></span>
+    <span class="mono">GDxDR: Bridging Graph Drawing and Dimensionality Reduction · co-located with EuroVis 2027, Stuttgart</span>
+    <span class="mono copy">© 2026–2027 Claudio D. G. Linhares</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- light / dark switch ---------- */
+  var root=document.documentElement,tb=document.getElementById("theme"),tl=document.getElementById("themeLabel");
+  function applyTheme(m){root.setAttribute("data-theme",m);var light=m==="light";tb.setAttribute("aria-pressed",String(light));tb.setAttribute("aria-label",light?"Switch to dark mode":"Switch to light mode");tl.textContent=light?"Dark":"Light"}
+  var saved=null;try{saved=localStorage.getItem("gdxdr-theme")}catch(e){}
+  applyTheme(saved||(root.getAttribute("data-theme")==="light"?"light":"dark"));
+  tb.addEventListener("click",function(){var m=root.getAttribute("data-theme")==="light"?"dark":"light";applyTheme(m);try{localStorage.setItem("gdxdr-theme",m)}catch(e){}});
+
+  /* ---------- highlight the nav link and title of the section in view ---------- */
+  var links={};document.querySelectorAll('nav.links a[href^="#"]').forEach(function(a){links[a.getAttribute("href").slice(1)]=a});
+  var bands=document.querySelectorAll("section.band[id]");
+  function setActive(id){bands.forEach(function(s){s.classList.toggle("active",s.id===id)});
+    Object.keys(links).forEach(function(k){links[k].classList.toggle("active",k===id)})}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)})},{rootMargin:"-35% 0px -60% 0px"});
+    bands.forEach(function(s){io.observe(s)});
+    window.addEventListener("scroll",function(){if(window.scrollY<200)setActive(null)},{passive:true});
+  }
+
+  /* ---------- 2026 photos: framed prints that flip to the next photo on their own ---------- */
+  (function(){
+    var st=document.getElementById("strip"),deck=document.getElementById("deck");if(!st||!deck)return;
+    var P=[].map.call(st.querySelectorAll("img"),function(im){return {src:im.getAttribute("src"),alt:im.alt}});
+    var N=P.length;if(!N)return;
+    P.forEach(function(p){var i=new Image();i.decoding="async";i.src=p.src});           /* preload so flips never show a blank */
+    var pad=function(n){return (n<9?"0":"")+(n+1)};
+    var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var slots=[],ptr=0,turn=0,timer=null,userPaused=reduce,hover=false,visible=true,S=0;
+    function face(cls){var f=document.createElement("figure");f.className="face "+cls;f.innerHTML='<img alt="" width="900" height="900"><figcaption><span></span><span>EuroVis 2026</span></figcaption>';return f}
+    function fill(f,i){var im=f.querySelector("img");im.src=P[i].src;im.alt=P[i].alt;f.querySelector("figcaption span").textContent="GDxDR '26 · "+pad(i)+"/"+N;f.classList.toggle("alt",i%2===1)}
+    function build(){
+      var w=deck.parentElement.clientWidth,n=w<520?1:(w<820?2:3);if(n===S)return;S=n;
+      deck.style.setProperty("--n",n);deck.innerHTML="";slots=[];
+      for(var k=0;k<n;k++){var pf=document.createElement("div");pf.className="pf";
+        var fl=document.createElement("div");fl.className="flip";var a=face("front"),b=face("back");
+        fl.appendChild(a);fl.appendChild(b);pf.appendChild(fl);deck.appendChild(pf);
+        var idx=(ptr+k)%N;fill(a,idx);fill(b,idx);b.setAttribute("aria-hidden","true");
+        slots.push({fl:fl,faces:[a,b],up:0})}
+      ptr=(ptr+n)%N;turn=0}
+    function flip(){
+      var s=slots[turn%S];turn++;
+      var hiddenFace=s.faces[1-s.up];fill(hiddenFace,ptr);ptr=(ptr+1)%N;
+      s.faces[s.up].setAttribute("aria-hidden","true");hiddenFace.removeAttribute("aria-hidden");
+      s.up=1-s.up;s.fl.classList.toggle("turned",s.up===1)}
+    function run(){clearInterval(timer);timer=null;
+      if(!userPaused&&!hover&&visible&&!document.hidden)timer=setInterval(flip,2600)}
+    var play=document.getElementById("galPlay"),next=document.getElementById("galNext");
+    function syncBtn(){play.textContent=userPaused?"▶":"❚❚";play.setAttribute("aria-label",userPaused?"Play slideshow":"Pause slideshow");play.setAttribute("aria-pressed",String(userPaused))}
+    play.addEventListener("click",function(){userPaused=!userPaused;syncBtn();run()});
+    next.addEventListener("click",function(){flip();run()});
+    deck.addEventListener("mouseenter",function(){hover=true;run()});
+    deck.addEventListener("mouseleave",function(){hover=false;run()});
+    document.addEventListener("visibilitychange",run);
+    if("IntersectionObserver" in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;run()},{threshold:.15}).observe(deck)}
+    var rz;window.addEventListener("resize",function(){clearTimeout(rz);rz=setTimeout(function(){build();run()},150)});
+    st.hidden=true;document.getElementById("galNav").hidden=false;
+    build();syncBtn();run();
+  })();
+
+  /* ---------- the GDxDR mark, alive: same nodes and edges as the logo, turned in 3D ---------- */
+  var cv=document.getElementById("morph"),ctx=cv.getContext("2d");
+  var TOP=[[32,40],[48,24],[64,30],[86,18],[98,38],[116,28],[52,58],[70,46]];
+  var BOT=[[32,98],[48,96],[64,102],[86,110],[98,108],[116,100],[52,112],[70,106]];
+  var EDGES=[[0,1],[2,3],[4,5],[6,7],[1,2],[3,4],[7,3],[0,6]];
+  var CX=70,CY=104,RX=54,RY=16;
+  var P3=TOP.map(function(t,i){var b=BOT[i];return {X:b[0]-CX,Z:(b[1]-CY)*RX/RY,H:b[1]-t[1]}});
+  /* bounding box over the whole spin, so no node leaves the canvas */
+  var BX=(function(){var y0=1e9;P3.forEach(function(p){var r=Math.hypot(p.X,p.Z);y0=Math.min(y0,CY-r*RY/RX-p.H)});y0-=6;var y1=CY+RY+5,x0=CX-RX-5,x1=CX+RX+5;return {x0:x0,y0:y0,w:x1-x0,h:y1-y0}})();
+  var W=0,H=0,dpr=1;
+  function size(){var r=cv.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+  size();window.addEventListener("resize",size);
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function mix(t){var a=[245,228,0],b=[46,226,74];return "rgb("+Math.round(a[0]+(b[0]-a[0])*t)+","+Math.round(a[1]+(b[1]-a[1])*t)+","+Math.round(a[2]+(b[2]-a[2])*t)+")"}
+  /* timeline (ms): hold logo, full turn back to logo, hold, drop graph onto plane, hold, lift */
+  var SEG=[["hold",3000],["turn",9000],["hold",1500],["drop",1400],["flat",1400],["lift",1800]];
+  var CYCLE=SEG.reduce(function(s,x){return s+x[1]},0);
+  function state(ms){var m=ms%CYCLE;for(var i=0;i<SEG.length;i++){if(m<SEG[i][1]){var f=m/SEG[i][1],n=SEG[i][0];
+        if(n==="turn")return {th:ease(f)*6.2832,t:0};
+        if(n==="drop")return {th:0,t:ease(f)};
+        if(n==="flat")return {th:0,t:1};
+        if(n==="lift")return {th:0,t:1-ease(f)};
+        return {th:0,t:0}}m-=SEG[i][1]}return {th:0,t:0}}
+  function draw(ms){
+    var st=state(ms),co=Math.cos(st.th),si=Math.sin(st.th),t=st.t;
+    var k=Math.min(W/BX.w,H/BX.h),ox=W/2-(BX.x0+BX.w/2)*k,oy=H/2-(BX.y0+BX.h/2)*k;
+    var bob=Math.sin(ms*.0012)*1.2*(1-t);
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    var tp=[],bp=[],cp=[],dep=[];
+    for(var i=0;i<P3.length;i++){var p=P3[i],X=p.X*co-p.Z*si,Z=p.X*si+p.Z*co;
+      var bx=CX+X,by=CY+Z*RY/RX,ty=by-p.H+bob;
+      bp.push([ox+bx*k,oy+by*k]);dep.push(Z/RX);
+      cp.push([ox+bx*k,oy+(ty+(by-ty)*t)*k])}
+    var LT=root.getAttribute("data-theme")==="light",OUT="#121310";
+    ctx.globalAlpha=LT?.85:.6;ctx.strokeStyle=LT?"#1fb83a":"#2ee24a";ctx.lineWidth=1.3*k;
+    ctx.beginPath();ctx.ellipse(ox+CX*k,oy+CY*k,RX*k,RY*k,0,0,6.2832);ctx.stroke();
+    if(t<.98){ctx.globalAlpha=.7*(1-t);ctx.strokeStyle=LT?"#1a9fcc":"#4fd8ff";ctx.lineWidth=.7*k;ctx.setLineDash([2*k,4*k]);ctx.lineDashOffset=-ms*.012*k;
+      ctx.beginPath();for(i=0;i<cp.length;i++){ctx.moveTo(cp[i][0],cp[i][1]);ctx.lineTo(bp[i][0],bp[i][1])}ctx.stroke();ctx.setLineDash([])}
+    ctx.globalAlpha=1;ctx.fillStyle="#2ee24a";
+    ctx.strokeStyle=OUT;ctx.lineWidth=.45*k;for(i=0;i<bp.length;i++){ctx.beginPath();ctx.arc(bp[i][0],bp[i][1],2.4*k*(1+dep[i]*.12),0,6.2832);ctx.fill();if(LT)ctx.stroke()}
+    ctx.globalAlpha=.8*(1-t*.6);ctx.strokeStyle=LT?(t<.5?"#c9b400":"#1fb83a"):mix(t);ctx.lineWidth=1.3*k;ctx.lineCap="round";
+    ctx.beginPath();EDGES.forEach(function(e){ctx.moveTo(cp[e[0]][0],cp[e[0]][1]);ctx.lineTo(cp[e[1]][0],cp[e[1]][1])});ctx.stroke();
+    ctx.globalAlpha=1;ctx.fillStyle=mix(t);
+    ctx.strokeStyle=OUT;ctx.lineWidth=.5*k;for(i=0;i<cp.length;i++){ctx.beginPath();ctx.arc(cp[i][0],cp[i][1],3.3*k*(1+dep[i]*.12)*(1-.25*t),0,6.2832);ctx.fill();if(LT)ctx.stroke()}
+  }  var startT=null;
+  function loop(now){if(startT===null)startT=now;draw(now-startT);requestAnimationFrame(loop)}
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

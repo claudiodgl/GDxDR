@@ -86,8 +86,13 @@ nav.links a:hover{color:var(--paper)}
 .eyebrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:flex-end;text-align:right;color:var(--mute);margin-top:-10px}
 .eyebrow a{color:var(--paper);text-underline-offset:3px;text-decoration-color:var(--mute)}
 .eyebrow .two{display:inline-flex;align-items:center;gap:8px;flex:none;color:var(--paper);font-weight:600}
-.eyebrow .two img{display:block;width:24px;height:40px;transform:rotate(-8deg);transition:transform .25s}
-.eyebrow .two:hover img{transform:rotate(4deg) scale(1.08)}
+.eyebrow .two img{display:block;width:24px;height:40px;transform:rotate(-8deg);transform-origin:50% 90%;animation:rock 8s ease-in-out infinite}
+/* hover swaps to a one-shot wiggle (name change restarts it); both rest at -8deg so there's no jump in or out */
+.eyebrow .two:hover img{animation:wiggle .8s ease-in-out 1}
+/* idle: still for ~7.2s, then the same quick wiggle (last 10% of 8s = .8s) */
+@keyframes rock{0%,90%,100%{transform:rotate(-8deg)}92.5%{transform:rotate(-26deg)}95%{transform:rotate(12deg)}97.5%{transform:rotate(-18deg)}98.8%{transform:rotate(-4deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg)}25%{transform:rotate(-26deg)}50%{transform:rotate(12deg)}75%{transform:rotate(-18deg)}88%{transform:rotate(-4deg)}}
+@media (prefers-reduced-motion:reduce){.eyebrow .two img{animation:none;transform:rotate(-8deg)}}
 .eyebrow .pill{color:var(--ink);background:var(--paper);padding:3px 8px;border-radius:2px;font-weight:600}
 h1{text-align:center;text-wrap:balance;overflow-wrap:break-word}
 h1 .and{display:block;font-family:var(--f-mono);font-weight:400;font-size:.26em;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin:.55em 0 .5em}
